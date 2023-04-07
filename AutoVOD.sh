@@ -132,12 +132,12 @@ while true; do
 		# Pass the stream from streamlink to youtubeuploader and then send the file to the void (dev/null)
 		streamlink twitch.tv/$STREAMER_NAME $STREAMLINK_OPTIONS | youtubeuploader -metaJSON /tmp/input.$STREAMER_NAME -filename - >/dev/null 2>&1 && TIME_DATE_CHECK=$($TIME_DATE)
 	elif [ "$UPLOAD_SERVICE" = "rclone" ]; then
-		# Saves the stream to a temp file stream.tmp
+		# Saves the stream to a unique temp file
 		# When the stream is finished, uploads the file to rclone
 		# then deletes the temp file
 		# https://rclone.org/commands/rclone_copyto/
 
-		TEMP_FILE="stream.tmp"
+		TEMP_FILE="$(mktemp)"
 
 		if [ "$RE_ENCODE" == "true" ]; then
 			#? Re-encode the stream before uploading it to rclone
